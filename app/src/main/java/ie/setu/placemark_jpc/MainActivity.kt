@@ -85,6 +85,7 @@ fun GreetingPreview() {
 @Composable
 fun ShowAddPlacemark() {
     var title by remember { mutableStateOf("") }
+    var showError by remember { mutableStateOf(false) }
 
     PlacemarkJPCTheme {
 
@@ -103,19 +104,36 @@ fun ShowAddPlacemark() {
                     placeholderColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 value = title,
-                onValueChange = { title = it },
+                onValueChange = {
+                    title = it
+                    showError = false
+                },
+                isError = showError,
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(stringResource(id = R.string.text_titleHint)) },
                 trailingIcon = {
-                    Icon(
-                        Icons.Default.Edit, contentDescription = "",
-                        tint = Color.Black
-                    )
-                },
+                    if (showError)
+                        Icon(
+                            Icons.Filled.Warning, "error",
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    else
+                        Icon(
+                            Icons.Default.Edit, contentDescription = "add/edit",
+                            tint = Color.Black
+                        )
+                } ,
+                supportingText = { ShowSupportText(showError) }
             )
+
             Button(
-                onClick = { },
-                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = {
+                    if (title.isEmpty()) {
+                        showError = true
+                    } else {
+                        addPlacemark(title)
+                    }
+                },
                 elevation = ButtonDefaults.buttonElevation(20.dp)
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
@@ -146,4 +164,20 @@ fun ShowToolBar() {
             }
         )
     }
+}
+
+@Composable
+fun ShowSupportText(isError : Boolean)
+{
+    if (isError)
+        Text(
+            text = "This Field is Required",
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.error,
+        )
+    else Text(text = "")
+}
+
+fun addPlacemark(title: String) {
+    i("Title Entered is : $title")
 }
