@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ie.setu.placemark_jpc.models.PlacemarkModel
 import ie.setu.placemark_jpc.ui.theme.PlacemarkJPCTheme
 import timber.log.Timber
 import timber.log.Timber.i
@@ -179,5 +180,8 @@ fun ShowSupportText(isError : Boolean)
 }
 
 fun addPlacemark(title: String) {
-    i("Title Entered is : $title")
+    val placemark = PlacemarkModel()
+
+    placemark.title = title
+    i("Title Entered is : $placemark.title")
 }
